@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How THC Gummies Are Made — Interactive Process</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:        #1f402d;
+    --green-mid:    #2d5c3e;
+    --green-light:  #3a7a52;
+    --cream:        #faf6ee;
+    --cream-mid:    #f0ead9;
+    --cream-dark:   #e4d9c4;
+    --gold:         #c9a84c;
+    --text:         #232318;
+    --text-muted:   #6b6452;
+  }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px 60px;
+  }
+
+  .widget {
+    width: 100%;
+    max-width: 780px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header .eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    margin-bottom: 10px;
+  }
+  .header h2 {
+    font-family: 'Lora', serif;
+    font-size: clamp(22px, 4vw, 30px);
+    font-style: italic;
+    font-weight: 600;
+    color: var(--green);
+    line-height: 1.25;
+  }
+  .header p {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: 480px;
+    margin-inline: auto;
+    line-height: 1.6;
+  }
+
+  /* ── Progress rail ── */
+  .progress-rail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 36px;
+    position: relative;
+  }
+  .rail-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    flex: 1;
+    max-width: 110px;
+  }
+  .rail-step::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--cream-dark);
+    z-index: -1;
+    transition: background 0.4s;
+  }
+  .rail-step:first-child::before { display: none; }
+  .rail-step.done::before,
+  .rail-step.active::before { background: var(--green); }
+
+  .rail-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--cream-dark);
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+  .rail-step.done .rail-dot {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+  .rail-step.active .rail-dot {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+    box-shadow: 0 0 0 5px rgba(31,64,45,0.15);
+    transform: scale(1.12);
+  }
+  .rail-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.3;
+    transition: color 0.3s;
+    max-width: 80px;
+  }
+  .rail-step.active .rail-label { color: var(--green); }
+
+  /* ── Card ── */
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 44px;
+    box-shadow: 0 4px 28px rgba(31,64,45,0.08), 0 1px 4px rgba(31,64,45,0.04);
+    min-height: 320px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--green), var(--green-light), var(--gold));
+    border-radius: 20px 20px 0 0;
+  }
+
+  /* step panels */
+  .step-panel {
+    display: none;
+    animation: fadeUp 0.35s ease forwards;
+  }
+  .step-panel.active { display: flex; gap: 36px; align-items: flex-start; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-icon-wrap {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+  }
+
+  .step-content { flex: 1; }
+
+  .step-number {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    margin-bottom: 6px;
+  }
+  .step-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+  .step-body {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.72;
+  }
+  .step-body p + p { margin-top: 10px; }
+
+  .step-tag {
+    display: inline-block;
+    margin-top: 18px;
+    background: var(--cream);
+    border: 1px solid var(--cream-dark);
+    border-radius: 40px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  /* ── Nav ── */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+    gap: 12px;
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary {
+    background: var(--cream-mid);
+    color: var(--text);
+  }
+  .btn-secondary:hover { background: var(--cream-dark); }
+  .btn-secondary:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-primary {
+    background: var(--green);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--green-mid); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .step-counter {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ── Completion card ── */
+  .completion {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 0;
+    gap: 16px;
+    animation: fadeUp 0.4s ease forwards;
+  }
+  .completion.active { display: flex; }
+  .completion .tick {
+    width: 64px; height: 64px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; color: #fff;
+  }
+  .completion h3 {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--green);
+  }
+  .completion p {
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: 380px;
+    line-height: 1.65;
+  }
+  .completion .cta-btn {
+    margin-top: 8px;
+    background: var(--green);
+    color: #fff;
+    padding: 13px 30px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .completion .cta-btn:hover { background: var(--green-mid); }
+  .restart-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: underline;
+    padding: 0;
+  }
+  .restart-btn:hover { color: var(--green); }
+
+  /* Mobile */
+  @media (max-width: 520px) {
+    .card { padding: 28px 20px; }
+    .step-panel.active { flex-direction: column; gap: 20px; }
+    .step-icon-wrap { width: 60px; height: 60px; font-size: 28px; }
+    .rail-label { display: none; }
+    .progress-rail { gap: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="widget">
+
+  <div class="header">
+    <div class="eyebrow">Interactive Guide</div>
+    <h2>How Commercial THC Gummies Are Made</h2>
+    <p>Step through the full manufacturing process — from raw hemp extract to the finished, lab-tested gummy.</p>
+  </div>
+
+  <!-- Progress rail -->
+  <div class="progress-rail" id="progressRail">
+    <div class="rail-step active" data-step="0" onclick="goTo(0)">
+      <div class="rail-dot">1</div>
+      <span class="rail-label">Extraction</span>
+    </div>
+    <div class="rail-step" data-step="1" onclick="goTo(1)">
+      <div class="rail-dot">2</div>
+      <span class="rail-label">Activation</span>
+    </div>
+    <div class="rail-step" data-step="2" onclick="goTo(2)">
+      <div class="rail-dot">3</div>
+      <span class="rail-label">Base</span>
+    </div>
+    <div class="rail-step" data-step="3" onclick="goTo(3)">
+      <div class="rail-dot">4</div>
+      <span class="rail-label">Infusion</span>
+    </div>
+    <div class="rail-step" data-step="4" onclick="goTo(4)">
+      <div class="rail-dot">5</div>
+      <span class="rail-label">Molding</span>
+    </div>
+    <div class="rail-step" data-step="5" onclick="goTo(5)">
+      <div class="rail-dot">6</div>
+      <span class="rail-label">Curing</span>
+    </div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Step panels -->
+    <div class="step-panel active" id="step-0">
+      <div class="step-icon-wrap">🌿</div>
+      <div class="step-content">
+        <div class="step-number">Step 1 of 6</div>
+        <div class="step-title">Extraction</div>
+        <div class="step-body">
+          <p>It all starts with extracting cannabinoids from the hemp plant. Manufacturers use CO₂ or ethanol extraction to pull THC, CBD, and other beneficial compounds from the plant material.</p>
+          <p>The result is a concentrated hemp extract or distillate — the core active ingredient in every gummy.</p>
+        </div>
+        <span class="step-tag">🔬 CO₂ or ethanol extraction</span>
+      </div>
+    </div>
+
+    <div class="step-panel" id="step-1">
+      <div class="step-icon-wrap">🔥</div>
+      <div class="step-content">
+        <div class="step-number">Step 2 of 6</div>
+        <div class="step-title">Activation</div>
+        <div class="step-body">
+          <p>THCa becomes more potent when heated, so the extract goes through a controlled heating process before infusion. This step is what makes the final gummy psychoactive.</p>
+          <p>Getting this stage right is critical — temperature and timing directly affect the potency of the finished product.</p>
+        </div>
+        <span class="step-tag">🌡️ Controlled heat application</span>
+      </div>
+    </div>
+
+    <div class="step-panel" id="step-2">
+      <div class="step-icon-wrap">🍯</div>
+      <div class="step-content">
+        <div class="step-number">Step 3 of 6</div>
+        <div class="step-title">Creating the Base</div>
+        <div class="step-body">
+          <p>A gelling agent — usually gelatin for traditional gummies or pectin for vegan options — is combined with water, sweeteners, and natural flavors over heat. This mixture forms the chewy base of the gummy.</p>
+          <p>The ratio of ingredients at this stage determines the texture and consistency of the final candy.</p>
+        </div>
+        <span class="step-tag">🌱 Pectin for vegan formulas</span>
+      </div>
+    </div>
+
+    <div class="step-panel" id="step-3">
+      <div class="step-icon-wrap">💧</div>
+      <div class="step-content">
+        <div class="step-number">Step 4 of 6</div>
+        <div class="step-title">Infusion</div>
+        <div class="step-body">
+          <p>The activated hemp extract is blended into the warm base along with lecithin — an emulsifier that helps the oil bind evenly throughout the mixture. Without lecithin, the THC would separate and pool unevenly.</p>
+          <p>This is the step that sets commercial gummies apart. Even distribution means every piece contains a consistent THC amount.</p>
+        </div>
+        <span class="step-tag">⚗️ Lecithin ensures even distribution</span>
+      </div>
+    </div>
+
+    <div class="step-panel" id="step-4">
+      <div class="step-icon-wrap">🐻</div>
+      <div class="step-content">
+        <div class="step-number">Step 5 of 6</div>
+        <div class="step-title">Molding &amp; Setting</div>
+        <div class="step-body">
+          <p>The liquid mixture is poured into candy molds and left to cool and firm up. Commercial producers use automated molding equipment to ensure uniformity across each batch.</p>
+          <p>Once set, the gummies are removed from the molds and inspected for quality before moving to the final stage.</p>
+        </div>
+        <span class="step-tag">🏭 Automated for batch uniformity</span>
+      </div>
+    </div>
+
+    <div class="step-panel" id="step-5">
+      <div class="step-icon-wrap">✅</div>
+      <div class="step-content">
+        <div class="step-number">Step 6 of 6</div>
+        <div class="step-title">Curing &amp; Lab Testing</div>
+        <div class="step-body">
+          <p>The gummies rest in a controlled environment to develop the right chewiness and moisture level. Curing can take anywhere from a few hours to a couple of days.</p>
+          <p>After curing, every batch is submitted to an independent lab for a Certificate of Analysis (COA) — confirming the THC amount on the label matches what's actually inside.</p>
+        </div>
+        <span class="step-tag">🔎 Third-party COA verified</span>
+      </div>
+    </div>
+
+    <!-- Completion -->
+    <div class="completion" id="completion">
+      <div class="tick">✓</div>
+      <h3>That's the full process.</h3>
+      <p>Six steps, from raw hemp to a lab-verified, consistently dosed gummy. Now you know exactly what goes into every piece.</p>
+      <a class="cta-btn" href="https://mood.com/shop/product-category/gummies" target="_blank">Shop Mood Gummies</a>
+      <button class="restart-btn" onclick="restart()">Start over</button>
+    </div>
+
+    <!-- Nav -->
+    <div class="nav" id="navBar">
+      <button class="btn btn-secondary" id="prevBtn" onclick="prev()" disabled>← Back</button>
+      <span class="step-counter" id="stepCounter">1 / 6</span>
+      <button class="btn btn-primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const TOTAL = 6;
+  let current = 0;
+
+  function updateRail() {
+    document.querySelectorAll('.rail-step').forEach((el, i) => {
+      el.classList.remove('active', 'done');
+      if (i < current) el.classList.add('done');
+      if (i === current) el.classList.add('active');
+    });
+  }
+
+  function showStep(idx) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('completion').classList.remove('active');
+    document.getElementById('navBar').style.display = 'flex';
+
+    if (idx >= TOTAL) {
+      document.getElementById('completion').classList.add('active');
+      document.getElementById('navBar').style.display = 'none';
+      document.querySelectorAll('.rail-step').forEach(el => {
+        el.classList.remove('active');
+        el.classList.add('done');
+      });
+      return;
+    }
+    document.getElementById('step-' + idx).classList.add('active');
+    document.getElementById('stepCounter').textContent = (idx + 1) + ' / ' + TOTAL;
+    document.getElementById('prevBtn').disabled = idx === 0;
+    document.getElementById('nextBtn').textContent = idx === TOTAL - 1 ? 'Finish ✓' : 'Next →';
+    updateRail();
+  }
+
+  function next() { current = Math.min(current + 1, TOTAL); showStep(current); }
+  function prev() { current = Math.max(current - 1, 0); showStep(current); }
+  function goTo(i) { current = i; showStep(current); }
+  function restart() { current = 0; showStep(0); }
+</script>
+</body>
+</html>
